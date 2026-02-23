@@ -1,18 +1,20 @@
 #  The contact options.
 
-- type: github
-  icon: "fab fa-github"
+- type: bilibili
+  icon: "fa-brands fa-bilibili"
+  url:  'https://space.bilibili.com/6625031'
 
-- type: twitter
-  icon: "fa-brands fa-x-twitter"
+- type: gcore
+  icon: "fa-solid fa-g"
+  url:  'https://www.gcores.com/users/759134/talks'
 
 - type: email
   icon: "fas fa-envelope"
   noblank: true # open link in current tab
 
-- type: rss
-  icon: "fas fa-rss"
-  noblank: true
+# - type: rss
+#   icon: "fas fa-rss"
+#   noblank: true
 # Uncomment and complete the url below to enable more contact options
 #
 # - type: mastodon
