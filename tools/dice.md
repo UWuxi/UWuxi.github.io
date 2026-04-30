@@ -19,8 +19,8 @@ const diceTypes = [
   { faces: 100, name: 'D100', color: '#6bcf7f' }
 ]
 
-const selectedDice = ref(6) // 默认D6
-const diceCount = ref(1)    // 默认1个
+const selectedDice = ref(6)
+const diceCount = ref(1)
 const rolling = ref(false)
 const results = ref([])
 const history = ref([])
@@ -38,13 +38,11 @@ const roll = () => {
   rolling.value = true
   results.value = []
   
-  // 生成结果
   const newResults = []
   for (let i = 0; i < diceCount.value; i++) {
     newResults.push(Math.floor(Math.random() * selectedDice.value) + 1)
   }
   
-  // 动画效果
   let steps = 0
   const maxSteps = 10
   const interval = setInterval(() => {
@@ -55,7 +53,6 @@ const roll = () => {
     if (steps >= maxSteps) {
       clearInterval(interval)
       results.value = newResults
-      // 添加到历史记录
       history.value.unshift({
         type: currentDice.value.name,
         count: diceCount.value,
@@ -80,148 +77,313 @@ const clearHistory = () => {
 }
 </script>
 
-<div style="padding: 24px; background: var(--vp-c-bg-soft); border-radius: 12px; margin: 20px 0;">
+<div class="dice-container">
   
-  <!-- 骰子类型选择 -->
-  <div style="margin-bottom: 20px;">
-    <label style="display: block; margin-bottom: 10px; font-size: 14px; color: var(--vp-c-text-2);">选择骰子面数</label>
-    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-      <button
+  <div class="dice-section">
+    <label class="section-label">选择骰子面数</label>
+    <div class="dice-types">
+      <div
         v-for="dice in diceTypes"
         :key="dice.faces"
         @click="selectedDice = dice.faces"
-        :style="{
-          padding: '10px 16px',
-          border: '2px solid ' + (selectedDice === dice.faces ? dice.color : 'var(--vp-c-border)'),
-          background: selectedDice === dice.faces ? dice.color : 'transparent',
-          color: selectedDice === dice.faces ? 'white' : 'var(--vp-c-text-1)',
-          borderRadius: '8px',
-          cursor: 'pointer',
-          fontWeight: '600',
-          transition: 'all 0.2s'
-        }"
+        class="dice-type-btn"
+        :class="{ active: selectedDice === dice.faces }"
+        :style="selectedDice === dice.faces ? { background: dice.color, borderColor: dice.color } : {}"
       >
         {{ dice.name }}
-      </button>
+      </div>
     </div>
   </div>
   
-  <!-- 数量选择 -->
-  <div style="margin-bottom: 24px;">
-    <label style="display: block; margin-bottom: 10px; font-size: 14px; color: var(--vp-c-text-2);">
-      骰子数量: <strong style="color: var(--vp-c-brand);">{{ diceCount }}</strong>
+  <div class="dice-section">
+    <label class="section-label">
+      骰子数量: <strong class="count-display">{{ diceCount }}</strong>
     </label>
     <input
       type="range"
       v-model.number="diceCount"
       min="1"
       max="20"
-      style="width: 100%; cursor: pointer;"
+      class="range-slider"
     />
-    <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px; color: var(--vp-c-text-2);">
+    <div class="range-labels">
       <span>1</span>
       <span>10</span>
       <span>20</span>
     </div>
   </div>
   
-  <!-- 快速预设 -->
-  <div style="margin-bottom: 24px;">
-    <label style="display: block; margin-bottom: 10px; font-size: 14px; color: var(--vp-c-text-2);">快速预设</label>
-    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-      <button @click="quickRoll(6, 3)" style="padding: 6px 12px; font-size: 13px; background: var(--vp-c-bg); border: 1px solid var(--vp-c-border); border-radius: 6px; cursor: pointer;">3D6</button>
-      <button @click="quickRoll(6, 4)" style="padding: 6px 12px; font-size: 13px; background: var(--vp-c-bg); border: 1px solid var(--vp-c-border); border-radius: 6px; cursor: pointer;">4D6</button>
-      <button @click="quickRoll(20, 1)" style="padding: 6px 12px; font-size: 13px; background: var(--vp-c-bg); border: 1px solid var(--vp-c-border); border-radius: 6px; cursor: pointer;">1D20</button>
-      <button @click="quickRoll(20, 2)" style="padding: 6px 12px; font-size: 13px; background: var(--vp-c-bg); border: 1px solid var(--vp-c-border); border-radius: 6px; cursor: pointer;">2D20</button>
-      <button @click="quickRoll(10, 2)" style="padding: 6px 12px; font-size: 13px; background: var(--vp-c-bg); border: 1px solid var(--vp-c-border); border-radius: 6px; cursor: pointer;">2D10 (D100)</button>
-      <button @click="quickRoll(100, 1)" style="padding: 6px 12px; font-size: 13px; background: var(--vp-c-bg); border: 1px solid var(--vp-c-border); border-radius: 6px; cursor: pointer;">1D100</button>
+  <div class="dice-section">
+    <label class="section-label">快速预设</label>
+    <div class="quick-presets">
+      <span @click="quickRoll(6, 3)" class="preset-btn">3D6</span>
+      <span @click="quickRoll(6, 4)" class="preset-btn">4D6</span>
+      <span @click="quickRoll(20, 1)" class="preset-btn">1D20</span>
+      <span @click="quickRoll(20, 2)" class="preset-btn">2D20</span>
+      <span @click="quickRoll(10, 2)" class="preset-btn">2D10</span>
+      <span @click="quickRoll(100, 1)" class="preset-btn">1D100</span>
     </div>
   </div>
   
-  <!-- 投掷按钮 -->
-  <button
+  <div
     @click="roll"
-    :disabled="rolling"
-    :style="{
-      width: '100%',
-      padding: '16px',
-      fontSize: '18px',
-      fontWeight: '600',
-      background: rolling ? 'var(--vp-c-text-3)' : 'var(--vp-c-brand)',
-      color: 'white',
-      border: 'none',
-      borderRadius: '10px',
-      cursor: rolling ? 'not-allowed' : 'pointer',
-      transition: 'all 0.2s'
-    }"
+    class="roll-btn"
+    :class="{ disabled: rolling }"
   >
     {{ rolling ? '投掷中...' : `投掷 ${diceCount}${currentDice.name}` }}
-  </button>
+  </div>
   
-  <!-- 结果显示 -->
-  <div v-if="results.length > 0" style="margin-top: 24px; padding: 20px; background: var(--vp-c-bg); border-radius: 10px;">
-    <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-bottom: 16px;">
+  <div v-if="results.length > 0" class="results-area">
+    <div class="dice-results">
       <div
         v-for="(result, index) in results"
         :key="index"
-        :style="{
-          width: diceCount.value > 10 ? '50px' : '60px',
-          height: diceCount.value > 10 ? '50px' : '60px',
-          background: currentDice.color,
-          borderRadius: diceCount.value > 10 ? '8px' : '12px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: diceCount.value > 10 ? '16px' : '20px',
-          fontWeight: 'bold',
-          color: 'white',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
-          transition: 'transform 0.1s'
-        }"
-        :class="{ 'rolling-dice': rolling }"
+        class="dice-box"
+        :class="{ small: diceCount > 10 }"
+        :style="{ background: currentDice.color }"
       >
         {{ result }}
       </div>
     </div>
-    <div style="text-align: center; font-size: 24px; font-weight: bold; color: var(--vp-c-brand);">
+    <div class="total-display">
       总计: {{ total }}
     </div>
   </div>
   
 </div>
 
-<!-- 历史记录 -->
-<div v-if="history.length > 0" style="padding: 20px; background: var(--vp-c-bg-soft); border-radius: 12px; margin-top: 20px;">
-  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-    <h3 style="margin: 0; font-size: 16px;">历史记录</h3>
-    <button @click="clearHistory" style="padding: 4px 12px; font-size: 12px; background: transparent; border: 1px solid var(--vp-c-border); border-radius: 4px; cursor: pointer; color: var(--vp-c-text-2);">清空</button>
+<div v-if="history.length > 0" class="history-container">
+  <div class="history-header">
+    <h3>历史记录</h3>
+    <span @click="clearHistory" class="clear-btn">清空</span>
   </div>
-  <div style="display: flex; flex-direction: column; gap: 8px;">
+  <div class="history-list">
     <div
       v-for="(record, index) in history"
       :key="index"
-      style="padding: 12px; background: var(--vp-c-bg); border-radius: 8px; font-size: 14px; display: flex; justify-content: space-between; align-items: center;"
+      class="history-item"
     >
-      <div>
-        <span style="font-weight: 600; color: var(--vp-c-brand);">{{ record.count }}{{ record.type }}</span>
-        <span style="color: var(--vp-c-text-2); margin-left: 8px;">{{ record.results.join(', ') }}</span>
+      <div class="history-left">
+        <span class="history-type">{{ record.count }}{{ record.type }}</span>
+        <span class="history-results">{{ record.results.join(', ') }}</span>
       </div>
-      <div style="text-align: right;">
-        <span style="font-weight: bold; font-size: 16px;">= {{ record.total }}</span>
-        <span style="color: var(--vp-c-text-3); font-size: 12px; margin-left: 8px;">{{ record.time }}</span>
+      <div class="history-right">
+        <span class="history-total">= {{ record.total }}</span>
+        <span class="history-time">{{ record.time }}</span>
       </div>
     </div>
   </div>
 </div>
 
-<style scoped>
-.rolling-dice {
-  animation: shake 0.1s infinite;
+<style>
+.dice-container {
+  padding: 24px;
+  background: var(--vp-c-bg-soft);
+  border-radius: 12px;
+  margin: 20px 0;
 }
 
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-2px) rotate(-2deg); }
-  75% { transform: translateX(2px) rotate(2deg); }
+.dice-section {
+  margin-bottom: 20px;
+}
+
+.section-label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: var(--vp-c-text-2);
+}
+
+.count-display {
+  color: var(--vp-c-brand);
+}
+
+.dice-types {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.dice-type-btn {
+  padding: 10px 16px;
+  border: 2px solid var(--vp-c-border);
+  background: transparent;
+  color: var(--vp-c-text-1);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.dice-type-btn.active {
+  color: white;
+}
+
+.range-slider {
+  width: 100%;
+  cursor: pointer;
+}
+
+.range-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--vp-c-text-2);
+}
+
+.quick-presets {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.preset-btn {
+  padding: 6px 12px;
+  font-size: 13px;
+  background: var(--vp-c-bg);
+  border: 1px solid var(--vp-c-border);
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--vp-c-text-1);
+}
+
+.preset-btn:hover {
+  background: var(--vp-c-bg-mute);
+}
+
+.roll-btn {
+  width: 100%;
+  padding: 16px;
+  font-size: 18px;
+  font-weight: 600;
+  background: var(--vp-c-brand);
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.roll-btn.disabled {
+  background: var(--vp-c-text-3);
+  cursor: not-allowed;
+}
+
+.results-area {
+  margin-top: 24px;
+  padding: 20px;
+  background: var(--vp-c-bg);
+  border-radius: 10px;
+}
+
+.dice-results {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.dice-box {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.dice-box.small {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.total-display {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--vp-c-brand);
+}
+
+.history-container {
+  padding: 20px;
+  background: var(--vp-c-bg-soft);
+  border-radius: 12px;
+  margin-top: 20px;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.history-header h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.clear-btn {
+  padding: 4px 12px;
+  font-size: 12px;
+  background: transparent;
+  border: 1px solid var(--vp-c-border);
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--vp-c-text-2);
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.history-item {
+  padding: 12px;
+  background: var(--vp-c-bg);
+  border-radius: 8px;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.history-left {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.history-type {
+  font-weight: 600;
+  color: var(--vp-c-brand);
+}
+
+.history-results {
+  color: var(--vp-c-text-2);
+}
+
+.history-right {
+  text-align: right;
+}
+
+.history-total {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.history-time {
+  color: var(--vp-c-text-3);
+  font-size: 12px;
+  margin-left: 8px;
 }
 </style>
