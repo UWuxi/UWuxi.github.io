@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <rect width="48" height="48" rx="12" fill="url(#trpg-gradient)"/>
+  <path d="M24 10L38 18V30L24 38L10 30V18L24 10Z" fill="white" fill-opacity="0.9"/>
+  <circle cx="24" cy="24" r="4" fill="url(#trpg-gradient)"/>
+  <defs>
+    <linearGradient id="trpg-gradient" x1="0" y1="0" x2="48" y2="48">
+      <stop offset="0%" stop-color="#667eea"/>
+      <stop offset="100%" stop-color="#764ba2"/>
+    </linearGradient>
+  </defs>
+</svg>

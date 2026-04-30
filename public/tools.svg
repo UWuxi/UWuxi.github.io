@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <rect width="48" height="48" rx="12" fill="url(#tools-gradient)"/>
+  <circle cx="24" cy="20" r="8" fill="white" fill-opacity="0.9"/>
+  <rect x="20" y="26" width="8" height="10" rx="2" fill="white" fill-opacity="0.9"/>
+  <rect x="22" y="30" width="4" height="4" rx="1" fill="url(#tools-gradient)"/>
+  <defs>
+    <linearGradient id="tools-gradient" x1="0" y1="0" x2="48" y2="48">
+      <stop offset="0%" stop-color="#f093fb"/>
+      <stop offset="100%" stop-color="#f5576c"/>
+    </linearGradient>
+  </defs>
+</svg>
