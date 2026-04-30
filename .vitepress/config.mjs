@@ -3,7 +3,7 @@ import { defineConfig } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "舞溪的树洞",
-  description: "AI 调研 · 项目进度 · 工具箱",
+  description: "TRPG · Blog · 工具箱",
   lang: 'zh-CN',
 
   head: [
@@ -13,26 +13,27 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: '首页', link: '/' },
-      { text: 'AI 调研', link: '/ai-research/' },
-      { text: '项目进度', link: '/projects/' },
+      { text: 'TRPG', link: '/trpg/' },
+      { text: 'Blog', link: '/blog/' },
       { text: '工具箱', link: '/tools/' },
     ],
 
     sidebar: {
-      '/ai-research/': [
+      '/trpg/': [
         {
-          text: 'AI 调研',
+          text: 'TRPG',
           items: [
-            { text: '调研总览', link: '/ai-research/' },
+            { text: 'TRPG 首页', link: '/trpg/' },
+            { text: '随机骰子', link: '/tools/dice' },
             // 待定添加...
           ]
         }
       ],
-      '/projects/': [
+      '/blog/': [
         {
-          text: '项目进度',
+          text: 'Blog',
           items: [
-            { text: '项目总览', link: '/projects/' },
+            { text: '文章列表', link: '/blog/' },
             // 待定添加...
           ]
         }
@@ -60,7 +61,7 @@ export default defineConfig({
 
     footer: {
       message: 'Powered by VitePress',
-      copyright: '© 2026'
+      copyright: '2026'
     },
 
     outline: {
