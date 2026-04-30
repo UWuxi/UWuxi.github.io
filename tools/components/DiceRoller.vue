@@ -1,75 +1,46 @@
 <template>
   <div class="dice-roller">
-    <div class="dice-result" :class="{ rolling: isRolling }">
-      <span class="result-number">{{ displayValue }}</span>
-    </div>
-    
-    <div class="dice-types">
-      <button 
-        v-for="dice in diceTypes" 
-        :key="dice.type"
-        :class="['dice-btn', { active: currentType === dice.type }]"
-        @click="selectDice(dice.type)"
-      >
-        {{ dice.label }}
-      </button>
-    </div>
-    
-    <button class="roll-btn" @click="roll" :disabled="isRolling">
-      {{ isRolling ? '滚动中...' : '🎲 投骰子' }}
-    </button>
-    
-    <div class="history" v-if="history.length > 0">
-      <h4>历史记录</h4>
-      <div class="history-list">
-        <span 
-          v-for="(item, index) in history.slice(-8)" 
-          :key="index"
-          class="history-item"
-        >
-          {{ item }}
-        </span>
+    <div class="dice-display" :class="{ rolling: isRolling }">
+      <div class="dice" :style="diceStyle">
+        {{ currentValue }}
       </div>
     </div>
+    <div class="result" v-if="result && !isRolling">
+      掷出了 <strong>{{ result }}</strong> 点！
+    </div>
+    <button @click="roll" :disabled="isRolling" class="roll-btn">
+      {{ isRolling ? '滚动中...' : '🎲 掷骰子' }}
+    </button>
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
 
-const diceTypes = [
-  { type: 6, label: 'D6' },
-  { type: 10, label: 'D10' },
-  { type: 20, label: 'D20' },
-  { type: 100, label: 'D100' }
-]
-
-const currentType = ref(20)
-const currentValue = ref(1)
-const displayValue = ref(1)
 const isRolling = ref(false)
-const history = ref([])
+const result = ref(null)
+const currentValue = ref(1)
 
-const selectDice = (type) => {
-  currentType.value = type
-  currentValue.value = 1
-  displayValue.value = 1
-}
+const diceStyle = computed(() => ({
+  transform: isRolling.value ? 'rotate(720deg)' : 'rotate(0deg)',
+  transition: isRolling.value ? 'transform 1s ease-out' : 'none'
+}))
 
 const roll = () => {
   if (isRolling.value) return
-  
   isRolling.value = true
+  result.value = null
+  
+  // 滚动动画
   let rolls = 0
-  const maxRolls = 10
   const interval = setInterval(() => {
-    displayValue.value = Math.floor(Math.random() * currentType.value) + 1
+    currentValue.value = Math.floor(Math.random() * 6) + 1
     rolls++
-    
-    if (rolls >= maxRolls) {
+    if (rolls > 10) {
       clearInterval(interval)
-      currentValue.value = displayValue.value
-      history.value.push(`D${currentType.value}: ${currentValue.value}`)
+      const final = Math.floor(Math.random() * 6) + 1
+      currentValue.value = final
+      result.value = final
       isRolling.value = false
     }
   }, 100)
@@ -78,109 +49,51 @@ const roll = () => {
 
 <style scoped>
 .dice-roller {
-  background: var(--vp-c-bg-soft);
-  border-radius: 12px;
-  padding: 24px;
-  margin: 16px 0;
-}
-
-.dice-result {
   text-align: center;
-  padding: 40px;
-  background: var(--vp-c-bg);
-  border-radius: 8px;
-  margin-bottom: 20px;
+  padding: 20px;
 }
-
-.result-number {
-  font-size: 64px;
-  font-weight: bold;
-  color: var(--vp-c-brand);
-  transition: all 0.1s;
-}
-
-.dice-result.rolling .result-number {
-  transform: scale(1.1);
-  opacity: 0.7;
-}
-
-.dice-types {
+.dice-display {
+  height: 120px;
   display: flex;
-  gap: 12px;
+  align-items: center;
   justify-content: center;
   margin-bottom: 20px;
-  flex-wrap: wrap;
 }
-
-.dice-btn {
-  padding: 10px 20px;
-  border: 2px solid var(--vp-c-brand);
-  background: transparent;
-  color: var(--vp-c-brand);
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.2s;
-}
-
-.dice-btn:hover {
-  background: var(--vp-c-brand);
+.dice {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  font-weight: bold;
   color: white;
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
 }
-
-.dice-btn.active {
-  background: var(--vp-c-brand);
-  color: white;
-}
-
-.roll-btn {
-  width: 100%;
-  padding: 16px 32px;
+.result {
   font-size: 18px;
+  margin-bottom: 16px;
+  color: var(--vp-c-text-1);
+}
+.roll-btn {
+  padding: 14px 32px;
+  font-size: 16px;
   font-weight: 600;
   background: var(--vp-c-brand);
   color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s;
 }
-
-.roll-btn:hover {
+.roll-btn:hover:not(:disabled) {
   background: var(--vp-c-brand-dark);
   transform: translateY(-2px);
 }
-
 .roll-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
-  transform: none;
-}
-
-.history {
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid var(--vp-c-divider);
-}
-
-.history h4 {
-  margin: 0 0 12px 0;
-  font-size: 14px;
-  color: var(--vp-c-text-2);
-}
-
-.history-list {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.history-item {
-  padding: 6px 12px;
-  background: var(--vp-c-bg);
-  border-radius: 4px;
-  font-size: 14px;
-  font-family: monospace;
-  color: var(--vp-c-text-1);
 }
 </style>

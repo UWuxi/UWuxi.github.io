@@ -21,12 +21,12 @@
     <div class="color-code">
       <code>{{ formattedColor }}</code>
       <button class="copy-btn" @click="copyToClipboard">
-        {{ copied ? '✓ 已复制' : '📋 复制' }}
+        {{ copied ? '已复制' : '复制' }}
       </button>
     </div>
     
     <button class="generate-btn" @click="generate">
-      🎨 生成颜色
+      生成颜色
     </button>
     
     <div class="history" v-if="history.length > 0">
