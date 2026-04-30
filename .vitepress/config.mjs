@@ -5,23 +5,23 @@ export default defineConfig({
   title: "舞溪的树洞",
   description: "AI 调研 · 项目进度 · 工具箱",
   lang: 'zh-CN',
-  
+
   head: [
     ['meta', { name: 'theme-color', content: '#5f67ee' }],
   ],
 
   themeConfig: {
     nav: [
-      { text: '🏠 首页', link: '/' },
-      { text: '📚 AI 调研', link: '/ai-research/' },
-      { text: '🚀 项目进度', link: '/projects/' },
-      { text: '🎲 工具箱', link: '/tools/' },
+      { text: '首页', link: '/' },
+      { text: 'AI 调研', link: '/ai-research/' },
+      { text: '项目进度', link: '/projects/' },
+      { text: '工具箱', link: '/tools/' },
     ],
 
     sidebar: {
       '/ai-research/': [
         {
-          text: '📚 AI 调研',
+          text: 'AI 调研',
           items: [
             { text: '调研总览', link: '/ai-research/' },
             // 待定添加...
@@ -30,7 +30,7 @@ export default defineConfig({
       ],
       '/projects/': [
         {
-          text: '🚀 项目进度',
+          text: '项目进度',
           items: [
             { text: '项目总览', link: '/projects/' },
             // 待定添加...
@@ -39,7 +39,7 @@ export default defineConfig({
       ],
       '/tools/': [
         {
-          text: '🎲 工具箱',
+          text: '工具箱',
           items: [
             { text: '工具总览', link: '/tools/' },
             { text: '随机骰子', link: '/tools/dice' },
