@@ -1,23 +1,28 @@
-# 🎨 随机颜色
+# 🎨 颜色生成器
 
-生成随机颜色，一键复制 CSS 代码。
+简单的随机颜色生成工具。
 
-<ColorGenerator />
+## 使用方法
+
+即将上线... 敬请期待 🚀
 
 <script setup>
-import ColorGenerator from './components/ColorGenerator.vue'
+import { ref } from 'vue'
+const color = ref('#5f67ee')
+
+const generate = () => {
+  const r = Math.floor(Math.random() * 256)
+  const g = Math.floor(Math.random() * 256)
+  const b = Math.floor(Math.random() * 256)
+  color.value = `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`
+}
 </script>
 
-## 使用说明
-
-- 点击"生成颜色"按钮随机生成
-- 点击色块复制 CSS 代码
-- 支持 HEX、RGB、HSL 格式
-
-## CSS 颜色格式
-
-| 格式 | 示例 | 说明 |
-|------|------|------|
-| HEX | `#5f67ee` | 最常用，6位16进制 |
-| RGB | `rgb(95, 103, 238)` | 红绿蓝三通道 |
-| HSL | `hsl(238, 80%, 65%)` | 色相、饱和度、亮度 |
+<div style="text-align: center; padding: 40px;">
+  <div :style="{ backgroundColor: color, width: '150px', height: '150px', margin: '0 auto 20px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontFamily: 'monospace', fontSize: '18px' }">
+    {{ color }}
+  </div>
+  <button @click="generate" style="padding: 12px 24px; font-size: 16px; cursor: pointer;">
+    🎨 生成颜色
+  </button>
+</div>

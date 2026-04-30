@@ -1,26 +1,36 @@
-# 🎲 随机骰子
+# 🎲 骰子工具
 
-投撲骰子，支持多种类型。
+简单的在线骰子工具，点击按钮掷出骰子。
 
-<DiceRoller />
+## 使用方法
+
+即将上线... 敬请期待 🚀
 
 <script setup>
-import DiceRoller from './components/DiceRoller.vue'
+import { ref } from 'vue'
+const result = ref(null)
+const rolling = ref(false)
+
+const roll = () => {
+  rolling.value = true
+  setTimeout(() => {
+    result.value = Math.floor(Math.random() * 6) + 1
+    rolling.value = false
+  }, 500)
+}
 </script>
 
-## 使用说明
-
-- 点击骰子按钮进行投撲
-- 支持 D6、D10、D20、D100 等多种类型
-- 结果完全随机，无后台服务器
-
-## 什么是 D&D 骰子？
-
-| 符号 | 含义 | 范围 |
-|------|------|------|
-| D6 | 6面骰子 | 1-6 |
-| D10 | 10面骰子 | 0-9 或 1-10 |
-| D20 | 20面骰子 | 1-20 |
-| D100 | 百面骰子 | 1-100 |
-
-D20 是龙与地下城等 TRPG 游戏中最常用的骰子。
+<div style="text-align: center; padding: 40px;">
+  <div v-if="result && !rolling" style="font-size: 48px; margin-bottom: 20px;">
+    🎲 {{ result }}
+  </div>
+  <div v-else-if="rolling" style="font-size: 48px; margin-bottom: 20px;">
+    🎲 掷出中...
+  </div>
+  <div v-else style="font-size: 48px; margin-bottom: 20px;">
+    🎲 ?
+  </div>
+  <button @click="roll" :disabled="rolling" style="padding: 12px 24px; font-size: 16px; cursor: pointer;">
+    {{ rolling ? '滚动中...' : '掷骰子' }}
+  </button>
+</div>

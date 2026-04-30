@@ -1,22 +1,33 @@
-# 💰 决策硬币
+# 🪙 硬币工具
 
-犹豫不决？让硬币帮你做决定！
+简单的在线抛硬币工具。
 
-<CoinFlipper />
+## 使用方法
+
+即将上线... 敬请期待 🚀
 
 <script setup>
-import CoinFlipper from './components/CoinFlipper.vue'
+import { ref } from 'vue'
+const result = ref(null)
+const flipping = ref(false)
+
+const flip = () => {
+  flipping.value = true
+  setTimeout(() => {
+    result.value = Math.random() < 0.5 ? '正面' : '反面'
+    flipping.value = false
+  }, 1000)
+}
 </script>
 
-## 使用说明
-
-1. 心中想好两个选项（A 和 B）
-2. 点击按钮投硬币
-3. 正面 = 选项 A，反面 = 选项 B
-4. 根据结果行动（或者...感到不服就再来一次 😄）
-
-## 关于决策
-
-> "抛硬币不是为了让硬币决定，而是让你在硬币落下的瞬间，听到自己内心的声音。"
-
-这个方法被称为 **"抛硬币决策法"**，特别适用于两难选择。很多时候，当你看到结果的那一瞬间，你会知道自己真正想要什么。
+<div style="text-align: center; padding: 40px;">
+  <div style="font-size: 64px; margin-bottom: 20px;">
+    {{ flipping ? '🪙' : (result === '正面' ? '🌕' : result === '反面' ? '🌑' : '🪙') }}
+  </div>
+  <div v-if="result && !flipping" style="font-size: 24px; margin-bottom: 20px;">
+    结果：{{ result }}
+  </div>
+  <button @click="flip" :disabled="flipping" style="padding: 12px 24px; font-size: 16px; cursor: pointer;">
+    {{ flipping ? '翻转中...' : '抛硬币' }}
+  </button>
+</div>

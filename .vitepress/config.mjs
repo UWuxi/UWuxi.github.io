@@ -1,5 +1,4 @@
 import { defineConfig } from 'vitepress'
-import vue from '@vitejs/plugin-vue'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -10,10 +9,6 @@ export default defineConfig({
   head: [
     ['meta', { name: 'theme-color', content: '#5f67ee' }],
   ],
-
-  vite: {
-    plugins: [vue()]
-  },
 
   themeConfig: {
     nav: [
