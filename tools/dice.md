@@ -1,13 +1,16 @@
 # 骰子工具
 
-TRPG风格的多面骰子投掷工具，支持D4/D6/D8/D10/D12/D20/D100。
-
-## 使用方法
-
-选择骰子面数和数量，点击投掷。
+TRPG风格的多面骰子投掷工具，支持标准骰子和 PDV 骰子引擎（dn/dl/dh）。
 
 <script setup>
 import { ref, computed } from 'vue'
+import DiceRoller from '/.vitepress/components/DiceRoller.vue'
+
+const activeTab = ref('standard')
+
+// ========================
+// 标准骰子逻辑（原有）
+// ========================
 
 const diceTypes = [
   { faces: 4, name: 'D4', color: '#ff6b6b' },
@@ -385,5 +388,29 @@ const clearHistory = () => {
   color: var(--vp-c-text-3);
   font-size: 12px;
   margin-left: 8px;
+}
+</style>
+
+---
+
+## PDV 骰子引擎
+
+泛界旅者骰子系统的网页版。支持 `dn(d6)` / `dl(d3)` / `dh(d3+3)` 三种特殊骰子，表达式运算和优劣势替换。
+
+<ClientOnly>
+  <div class="pdv-section">
+    <DiceRoller />
+  </div>
+</ClientOnly>
+
+<style>
+.pdv-section {
+  margin-top: 0;
+}
+
+/* 为了让通用骰子区的样式不和 DiceRoller 冲突，加上名字空间 */
+.pdv-section .dice-container {
+  padding: 0;
+  background: transparent;
 }
 </style>
