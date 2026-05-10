@@ -36,12 +36,14 @@ function normalizeExpr(expr) {
   // 运算符标准化: ×→*  ÷→/
   s = s.replace(/[×xX]/g, '*').replace(/÷/g, '/')
   // 统一 dn/dl/dh 大小写 (只保留小写)
-  s = s.replace(/\b(\d*)(?:[Dd]([NnLlHh]))\b/g, (m, n, k) => {
-    return (n || '') + k.toLowerCase()
+  // 注意：保持 'd' 前缀不变，只转换后面的 n/l/h 大小写
+  // 使用 'd' 字面量 + i 标志来匹配 D/d
+  s = s.replace(/\b(\d*)d([nNlLhH])\b/gi, (m, n, k) => {
+    return (n || '') + 'd' + k.toLowerCase()
   })
   // 处理 "3d n" "2d l" 这种空格写法
-  s = s.replace(/\b(\d*)[Dd]\s+([NnLlHh])\b/g, (m, n, k) => {
-    return (n || '') + k.toLowerCase()
+  s = s.replace(/\b(\d*)d\s+([nNlLhH])\b/gi, (m, n, k) => {
+    return (n || '') + 'd' + k.toLowerCase()
   })
   return s
 }
